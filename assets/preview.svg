@@ -1,0 +1,45 @@
+<svg xmlns='http://www.w3.org/2000/svg' width='1200' height='630' viewBox='0 0 1200 630'>
+  <defs>
+    <linearGradient id='bg' x1='0' y1='0' x2='0' y2='1'>
+      <stop offset='0%' stop-color='#f8fafc'/>
+      <stop offset='100%' stop-color='#eef2f7'/>
+    </linearGradient>
+    <linearGradient id='card1' x1='0' y1='0' x2='1' y2='1'>
+      <stop offset='0%' stop-color='#e0f2fe'/>
+      <stop offset='100%' stop-color='#f0f9ff'/>
+    </linearGradient>
+    <linearGradient id='card2' x1='0' y1='0' x2='1' y2='1'>
+      <stop offset='0%' stop-color='#dcfce7'/>
+      <stop offset='100%' stop-color='#f0fdf4'/>
+    </linearGradient>
+    <linearGradient id='card3' x1='0' y1='0' x2='1' y2='1'>
+      <stop offset='0%' stop-color='#fee2e2'/>
+      <stop offset='100%' stop-color='#fff7ed'/>
+    </linearGradient>
+    <filter id='shadow' x='-50%' y='-50%' width='200%' height='200%'>
+      <feDropShadow dx='0' dy='8' stdDeviation='12' flood-color='rgba(15,23,42,0.18)'/>
+    </filter>
+  </defs>
+  <rect width='1200' height='630' fill='url(#bg)'/>
+
+  <g font-family='Segoe UI, Roboto, Helvetica, Arial' text-rendering='optimizeLegibility'>
+    <text x='80' y='132' font-size='56' fill='#0f172a' font-weight='700'>Layout_aria_CSS</text>
+    <text x='80' y='180' font-size='26' fill='#475569'>Flexbox centralizado horizontal e verticalmente</text>
+
+    <g transform='translate(80, 250)'>
+      <rect x='0' y='0' width='180' height='180' rx='16' fill='url(#card1)' filter='url(#shadow)'/>
+      <text x='90' y='105' text-anchor='middle' font-size='22' fill='#0f172a' font-weight='700'>Caixa 1</text>
+
+      <rect x='220' y='0' width='180' height='180' rx='16' fill='url(#card2)' filter='url(#shadow)'/>
+      <text x='310' y='105' text-anchor='middle' font-size='22' fill='#0f172a' font-weight='700'>Caixa 2</text>
+
+      <rect x='440' y='0' width='180' height='180' rx='16' fill='url(#card3)' filter='url(#shadow)'/>
+      <text x='530' y='105' text-anchor='middle' font-size='22' fill='#0f172a' font-weight='700'>Caixa 3</text>
+    </g>
+
+    <a href='https://matheussiqueirahub.github.io/layout_aria_CSS/' target='_blank'>
+      <rect x='880' y='520' width='300' height='56' rx='12' fill='#0ea5e9'/>
+      <text x='1030' y='555' text-anchor='middle' font-size='24' fill='white' font-weight='700'>Ver Demo</text>
+    </a>
+  </g>
+</svg>

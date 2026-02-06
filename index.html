@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Layout Aria CSS | Studio Flexbox Profissional</title>
+    <meta
+      name="description"
+      content="Ambiente de desenvolvimento visual para layouts Flexbox com foco em arquitetura, acessibilidade e código limpo."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+    <script defer src="script.js"></script>
+    <link rel="icon" type="image/svg+xml" href="assets/preview.svg" />
+  </head>
+  <body class="theme-dark">
+    <div class="app-layout">
+      <!-- Sidebar de Controles -->
+      <aside class="sidebar">
+        <div class="sidebar-header">
+          <div class="logo">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+              <line x1="3" y1="9" x2="21" y2="9"></line>
+              <line x1="9" y1="21" x2="9" y2="9"></line>
+            </svg>
+            <span>Layout Aria</span>
+          </div>
+          <button id="theme-toggle" class="icon-btn" aria-label="Alternar tema">
+            <svg class="sun-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+            <svg class="moon-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none;"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+          </button>
+        </div>
+
+        <div class="controls-container">
+          <!-- Container Properties -->
+          <section class="control-group">
+            <div class="group-header">
+              <h3>Container Flex</h3>
+              <span class="badge">Parent</span>
+            </div>
+
+            <div class="control-item">
+              <label for="flex-direction">Direction</label>
+              <div class="select-wrapper">
+                <select id="flex-direction" data-css-prop="flex-direction">
+                  <option value="row" selected>row</option>
+                  <option value="row-reverse">row-reverse</option>
+                  <option value="column">column</option>
+                  <option value="column-reverse">column-reverse</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="control-item">
+              <label for="flex-wrap">Wrap</label>
+              <div class="select-wrapper">
+                <select id="flex-wrap" data-css-prop="flex-wrap">
+                  <option value="nowrap" selected>nowrap</option>
+                  <option value="wrap">wrap</option>
+                  <option value="wrap-reverse">wrap-reverse</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="control-item">
+              <label for="justify-content">Justify Content</label>
+              <div class="select-wrapper">
+                <select id="justify-content" data-css-prop="justify-content">
+                  <option value="flex-start" selected>flex-start</option>
+                  <option value="flex-end">flex-end</option>
+                  <option value="center">center</option>
+                  <option value="space-between">space-between</option>
+                  <option value="space-around">space-around</option>
+                  <option value="space-evenly">space-evenly</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="control-item">
+              <label for="align-items">Align Items</label>
+              <div class="select-wrapper">
+                <select id="align-items" data-css-prop="align-items">
+                  <option value="stretch" selected>stretch</option>
+                  <option value="flex-start">flex-start</option>
+                  <option value="flex-end">flex-end</option>
+                  <option value="center">center</option>
+                  <option value="baseline">baseline</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="control-item">
+              <label for="align-content">Align Content</label>
+              <div class="select-wrapper">
+                <select id="align-content" data-css-prop="align-content">
+                  <option value="normal" selected>normal</option>
+                  <option value="flex-start">flex-start</option>
+                  <option value="flex-end">flex-end</option>
+                  <option value="center">center</option>
+                  <option value="space-between">space-between</option>
+                  <option value="space-around">space-around</option>
+                  <option value="stretch">stretch</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="control-item">
+              <label for="gap">Gap (px)</label>
+              <input type="range" id="gap" min="0" max="64" value="16" data-css-prop="gap" data-unit="px">
+              <span class="value-display" id="gap-val">16px</span>
+            </div>
+          </section>
+
+          <!-- Items Management -->
+          <section class="control-group">
+            <div class="group-header">
+              <h3>Itens</h3>
+              <div class="actions">
+                <button id="add-item" class="btn-sm primary" aria-label="Adicionar item">+</button>
+                <button id="remove-item" class="btn-sm danger" aria-label="Remover item">-</button>
+              </div>
+            </div>
+            <div class="items-info">
+              <p>Quantidade: <span id="item-count">4</span></p>
+            </div>
+          </section>
+        </div>
+      </aside>
+
+      <!-- Área Principal -->
+      <main class="main-content">
+        <header class="top-bar">
+          <nav class="presets">
+            <button class="pill active" data-preset="default">Default</button>
+            <button class="pill" data-preset="hero">Hero Section</button>
+            <button class="pill" data-preset="sidebar">Sticky Sidebar</button>
+            <button class="pill" data-preset="grid">Card Grid</button>
+          </nav>
+          
+          <div class="top-actions">
+            <button class="btn secondary" id="btn-login">Login</button>
+            <button class="btn primary" id="btn-save">Salvar Layout</button>
+          </div>
+        </header>
+
+        <section class="canvas-area">
+          <div class="canvas-wrapper">
+            <div id="playground" class="preview-container">
+              <div class="flex-item">1</div>
+              <div class="flex-item">2</div>
+              <div class="flex-item">3</div>
+              <div class="flex-item">4</div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Painel de Código -->
+        <section class="code-panel">
+          <div class="code-header">
+            <h4>CSS Gerado</h4>
+            <button id="copy-css" class="btn-xs">Copiar</button>
+          </div>
+          <pre><code id="css-output">.container {
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+}</code></pre>
+        </section>
+      </main>
+    </div>
+    
+    <!-- Toast Notification -->
+    <div id="toast" class="toast hidden">Copiado!</div>
+  </body>
+</html>

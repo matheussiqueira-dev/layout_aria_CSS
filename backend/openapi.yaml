@@ -1,0 +1,573 @@
+openapi: 3.1.0
+info:
+  title: layout_aria_CSS Backend API
+  version: 1.4.0
+  description: |
+    API backend para autenticacao, compartilhamento, versionamento e gerenciamento de layouts Flexbox.
+servers:
+  - url: http://localhost:4000
+security:
+  - bearerAuth: []
+paths:
+  /api/v1/health:
+    get:
+      tags: [Health]
+      security: []
+      summary: Health check
+      responses:
+        '200':
+          description: API healthy
+  /api/v1/health/ready:
+    get:
+      tags: [Health]
+      security: []
+      summary: Readiness check
+      responses:
+        '200':
+          description: API ready
+  /api/v1/auth/register:
+    post:
+      tags: [Auth]
+      security: []
+      summary: Register new user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterInput'
+      responses:
+        '201':
+          description: User registered
+  /api/v1/auth/login:
+    post:
+      tags: [Auth]
+      security: []
+      summary: Authenticate user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginInput'
+      responses:
+        '200':
+          description: Login success
+  /api/v1/auth/me:
+    get:
+      tags: [Auth]
+      summary: Get authenticated user profile
+      responses:
+        '200':
+          description: Authenticated user
+  /api/v1/auth/refresh:
+    post:
+      tags: [Auth]
+      security: []
+      summary: Rotate refresh token and issue new token pair
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RefreshTokenInput'
+      responses:
+        '200':
+          description: Token pair refreshed
+        '401':
+          description: Invalid or expired refresh token
+  /api/v1/auth/logout:
+    post:
+      tags: [Auth]
+      security: []
+      summary: Revoke a refresh token session
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RefreshTokenInput'
+      responses:
+        '200':
+          description: Session revocation result
+  /api/v1/auth/logout-all:
+    post:
+      tags: [Auth]
+      summary: Revoke all active sessions for current user
+      responses:
+        '200':
+          description: Revoked sessions count
+  /api/v1/auth/sessions:
+    get:
+      tags: [Auth]
+      summary: List current user sessions
+      responses:
+        '200':
+          description: Session list for authenticated user
+  /api/v1/auth/sessions/{sessionId}:
+    delete:
+      tags: [Auth]
+      summary: Revoke a specific session from authenticated user
+      parameters:
+        - in: path
+          name: sessionId
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Session revoke result
+  /api/v1/layouts/public:
+    get:
+      tags: [Layouts]
+      security: []
+      summary: List public layouts
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: integer
+            minimum: 1
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 50
+        - in: query
+          name: search
+          schema:
+            type: string
+        - in: query
+          name: tag
+          schema:
+            type: string
+        - in: query
+          name: sort
+          schema:
+            type: string
+            enum: [recent, popular]
+      responses:
+        '200':
+          description: Public layouts list
+  /api/v1/layouts/public/tags:
+    get:
+      tags: [Layouts]
+      security: []
+      summary: List most used tags from public layouts
+      parameters:
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+      responses:
+        '200':
+          description: Public tags list
+  /api/v1/layouts/mine:
+    get:
+      tags: [Layouts]
+      summary: List current user layouts
+      responses:
+        '200':
+          description: User layouts list
+  /api/v1/layouts:
+    post:
+      tags: [Layouts]
+      summary: Create layout
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LayoutCreateInput'
+      responses:
+        '201':
+          description: Layout created
+  /api/v1/layouts/{id}:
+    get:
+      tags: [Layouts]
+      security: []
+      summary: Get layout by id
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Layout detail
+    patch:
+      tags: [Layouts]
+      summary: Update layout with optimistic concurrency
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LayoutUpdateInput'
+      responses:
+        '200':
+          description: Layout updated
+        '409':
+          description: Version mismatch
+    delete:
+      tags: [Layouts]
+      summary: Delete layout
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Layout deleted
+  /api/v1/layouts/{id}/publish:
+    post:
+      tags: [Layouts]
+      summary: Publish or unpublish layout
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LayoutPublishInput'
+      responses:
+        '200':
+          description: Publish state updated
+        '409':
+          description: Version mismatch
+  /api/v1/layouts/{id}/star:
+    post:
+      tags: [Layouts]
+      summary: Toggle star on layout
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Star state changed
+  /api/v1/layouts/{id}/clone:
+    post:
+      tags: [Layouts]
+      summary: Clone layout to authenticated user
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '201':
+          description: Layout cloned
+  /api/v1/layouts/{id}/revisions:
+    get:
+      tags: [Layouts]
+      summary: List layout revisions
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - in: query
+          name: page
+          schema:
+            type: integer
+            minimum: 1
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 50
+      responses:
+        '200':
+          description: Layout revision list
+  /api/v1/layouts/{id}/revisions/{revisionId}:
+    get:
+      tags: [Layouts]
+      summary: Get a specific revision by id
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - in: path
+          name: revisionId
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Layout revision detail
+  /api/v1/layouts/{id}/restore:
+    post:
+      tags: [Layouts]
+      summary: Restore layout using a revision snapshot
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LayoutRestoreInput'
+      responses:
+        '200':
+          description: Layout restored
+        '409':
+          description: Version mismatch
+  /api/v1/admin/stats:
+    get:
+      tags: [Admin]
+      summary: System aggregate stats
+      responses:
+        '200':
+          description: Stats payload
+  /api/v1/admin/users:
+    get:
+      tags: [Admin]
+      summary: List users (admin only)
+      responses:
+        '200':
+          description: User list
+  /api/v1/admin/audit:
+    get:
+      tags: [Admin]
+      summary: List audit logs (admin only)
+      responses:
+        '200':
+          description: Audit list
+  /api/v1/metrics:
+    get:
+      tags: [Metrics]
+      summary: Runtime metrics (admin only)
+      responses:
+        '200':
+          description: Metrics payload
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    RegisterInput:
+      type: object
+      required: [name, email, password]
+      properties:
+        name:
+          type: string
+          minLength: 2
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+          minLength: 8
+    LoginInput:
+      type: object
+      required: [email, password]
+      properties:
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+    RefreshTokenInput:
+      type: object
+      required: [refreshToken]
+      properties:
+        refreshToken:
+          type: string
+          minLength: 16
+          maxLength: 512
+    SessionView:
+      type: object
+      required: [id, createdAt, updatedAt, expiresAt, lastUsedAt, isCurrent]
+      properties:
+        id:
+          type: string
+          format: uuid
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        expiresAt:
+          type: string
+          format: date-time
+        revokedAt:
+          type: string
+          format: date-time
+          nullable: true
+        revokeReason:
+          type: string
+          nullable: true
+        lastUsedAt:
+          type: string
+          format: date-time
+        lastIp:
+          type: string
+          nullable: true
+        lastUserAgent:
+          type: string
+          nullable: true
+        isCurrent:
+          type: boolean
+    LayoutConfig:
+      type: object
+      required:
+        - direction
+        - justifyContent
+        - alignItems
+        - alignContent
+        - wrap
+        - gapPx
+        - minHeightVh
+        - itemSizePx
+        - itemCount
+        - showIndex
+        - showAxes
+      properties:
+        direction:
+          type: string
+        justifyContent:
+          type: string
+        alignItems:
+          type: string
+        alignContent:
+          type: string
+        wrap:
+          type: string
+        gapPx:
+          type: integer
+        minHeightVh:
+          type: integer
+        itemSizePx:
+          type: integer
+        itemCount:
+          type: integer
+        showIndex:
+          type: boolean
+        showAxes:
+          type: boolean
+    LayoutCreateInput:
+      type: object
+      required: [name, config]
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        tags:
+          type: array
+          items:
+            type: string
+        config:
+          $ref: '#/components/schemas/LayoutConfig'
+        isPublic:
+          type: boolean
+    LayoutUpdateInput:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        tags:
+          type: array
+          items:
+            type: string
+        config:
+          $ref: '#/components/schemas/LayoutConfig'
+        isPublic:
+          type: boolean
+        expectedVersion:
+          type: integer
+          minimum: 1
+    LayoutPublishInput:
+      type: object
+      required: [isPublic]
+      properties:
+        isPublic:
+          type: boolean
+        expectedVersion:
+          type: integer
+          minimum: 1
+    LayoutRestoreInput:
+      type: object
+      required: [revisionId]
+      properties:
+        revisionId:
+          type: string
+          format: uuid
+        expectedVersion:
+          type: integer
+          minimum: 1
+    PublicTag:
+      type: object
+      required: [tag, count]
+      properties:
+        tag:
+          type: string
+        count:
+          type: integer
+    LayoutRevision:
+      type: object
+      required: [id, layoutId, version, action, createdAt, createdBy, snapshot]
+      properties:
+        id:
+          type: string
+          format: uuid
+        layoutId:
+          type: string
+          format: uuid
+        version:
+          type: integer
+        action:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        createdBy:
+          type: string
+          format: uuid
+        snapshot:
+          type: object
