@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Layout Aria | Professional Flexbox Studio</title>
+    <meta
+      name="description"
+      content="Studio visual para arquitetura de layouts Flexbox. Exporte código CSS/HTML limpo e acessível."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+    <script type="module" src="js/main.js"></script>
+    <link rel="icon" type="image/svg+xml" href="assets/preview.svg" />
+  </head>
+  <body class="theme-dark">
+    <div class="app-layout">
+      <!-- Sidebar de Controles -->
+      <aside class="sidebar">
+        <div class="sidebar-header">
+          <div class="logo">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+              <line x1="15" y1="9" x2="21" y2="9"></line>
+              <line x1="9" y1="9" x2="15" y2="9"></line>
+            </svg>
+            <span>Layout Aria</span>
+          </div>
+          <button id="theme-toggle" class="icon-btn" aria-label="Alternar tema">
+            <svg class="sun-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+            <svg class="moon-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none;"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+          </button>
+        </div>
+
+        <div class="controls-container">
+          <!-- Container Properties -->
+          <section class="control-group">
+            <div class="group-header">
+              <h3>Flex Container</h3>
+            </div>
+
+            <div class="control-item">
+              <label>
+                Direction
+                <span class="value-display" id="display-direction">Row</span>
+              </label>
+              <!-- UI Control: Toggle Group -->
+              <div class="toggle-group" data-ui-control="toggle" data-css-prop="flex-direction">
+                <button class="toggle-btn active" data-value="row" title="Row">
+                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17l10 0"></path><path d="M13 13l4 4l-4 4"></path></svg>
+                   <span>Row</span>
+                </button>
+                <button class="toggle-btn" data-value="column" title="Column">
+                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 7l0 10"></path><path d="M8 13l4 4l4-4"></path></svg>
+                   <span>Col</span>
+                </button>
+                <button class="toggle-btn" data-value="row-reverse" title="Row Reverse">
+                    R-Rev
+                </button>
+                <button class="toggle-btn" data-value="column-reverse" title="Column Reverse">
+                    C-Rev
+                </button>
+              </div>
+            </div>
+
+            <div class="control-item">
+              <label>Wrap</label>
+              <div class="toggle-group" data-ui-control="toggle" data-css-prop="flex-wrap">
+                <button class="toggle-btn active" data-value="nowrap">No Wrap</button>
+                <button class="toggle-btn" data-value="wrap">Wrap</button>
+              </div>
+            </div>
+
+            <div class="control-item">
+              <label>Justify Content</label>
+              <div class="toggle-group grid-layout" data-ui-control="toggle" data-css-prop="justify-content">
+                <button class="toggle-btn active" data-value="flex-start" title="Start">Start</button>
+                <button class="toggle-btn" data-value="center" title="Center">Center</button>
+                <button class="toggle-btn" data-value="flex-end" title="End">End</button>
+                <button class="toggle-btn" data-value="space-between" title="Between">Between</button>
+                <button class="toggle-btn" data-value="space-around" title="Around">Around</button>
+                <button class="toggle-btn" data-value="space-evenly" title="Evenly">Evenly</button>
+              </div>
+            </div>
+
+            <div class="control-item">
+              <label>Align Items</label>
+              <div class="toggle-group grid-layout" data-ui-control="toggle" data-css-prop="align-items">
+                <button class="toggle-btn active" data-value="stretch">Stretch</button>
+                <button class="toggle-btn" data-value="center">Center</button>
+                <button class="toggle-btn" data-value="flex-start">Start</button>
+                <button class="toggle-btn" data-value="flex-end">End</button>
+                <button class="toggle-btn" data-value="baseline">Baseline</button>
+              </div>
+            </div>
+
+            <div class="control-item">
+              <label>
+                  Gap
+                  <span class="value-display" id="gap-val">16px</span>
+              </label>
+              <input type="range" id="gap" min="0" max="64" value="16" data-css-prop="gap" data-unit="px">
+            </div>
+          </section>
+
+          <!-- Items Management -->
+          <section class="control-group">
+            <div class="group-header">
+              <h3>Items</h3>
+            </div>
+            <div class="items-info">
+              <p><span id="item-count">4</span> items</p>
+              <div class="actions">
+                <button id="add-item" class="btn-sm primary" aria-label="Adicionar item">+</button>
+                <button id="remove-item" class="btn-sm secondary danger-text" aria-label="Remover item">-</button>
+              </div>
+            </div>
+          </section>
+        </div>
+      </aside>
+
+      <!-- Área Principal -->
+      <main class="main-content">
+        <header class="top-bar">
+          <nav class="presets">
+            <button class="pill active" data-preset="default">Default</button>
+            <button class="pill" data-preset="hero">Hero</button>
+            <button class="pill" data-preset="sidebar">Sticky</button>
+            <button class="pill" data-preset="grid">Grid</button>
+          </nav>
+          
+          <div class="top-actions">
+           <!-- Dynamic Auth Buttons injected by JS -->
+           <div id="auth-container">
+             <!-- Placeholder for buttons -->
+           </div>
+          </div>
+        </header>
+
+        <section class="canvas-area">
+          <div class="canvas-wrapper">
+            <div id="playground" class="preview-container">
+              <div class="flex-item">1</div>
+              <div class="flex-item">2</div>
+              <div class="flex-item">3</div>
+              <div class="flex-item">4</div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Painel de Código -->
+        <section class="code-panel">
+          <div class="code-header">
+            <div class="code-tabs">
+              <button class="tab-btn active" data-tab="css">CSS</button>
+              <button class="tab-btn" data-tab="html">HTML</button>
+            </div>
+            <button id="copy-code" class="btn-xs secondary">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:0;"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                Copiar
+            </button>
+          </div>
+          <div class="code-content active" id="tab-css">
+            <pre><code id="css-output">.container {
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+}</code></pre>
+          </div>
+          <div class="code-content hidden" id="tab-html">
+            <pre><code id="html-output">&lt;div class="container"&gt;
+  &lt;div class="flex-item"&gt;1&lt;/div&gt;
+  &lt;div class="flex-item"&gt;2&lt;/div&gt;
+  &lt;div class="flex-item"&gt;3&lt;/div&gt;
+  &lt;div class="flex-item"&gt;4&lt;/div&gt;
+&lt;/div&gt;</code></pre>
+          </div>
+        </section>
+      </main>
+    </div>
+    
+    <!-- Toast & Overlay -->
+    <div id="toast" class="toast">Notificação</div>
+  </body>
+</html>

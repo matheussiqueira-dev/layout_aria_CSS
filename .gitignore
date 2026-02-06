@@ -1,0 +1,14 @@
+# Frontend artifacts
+node_modules/
+
+# Backend
+backend/node_modules/
+backend/.env
+backend/data/db.json
+backend/coverage/
+backend/npm-debug.log*
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
