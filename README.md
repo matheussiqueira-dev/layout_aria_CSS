@@ -20,8 +20,9 @@
 
 ### Funcionalidades de Produtividade
 - **Presets Inteligentes:** Configurações pré-definidas para cenários comuns (Hero, Sidebar, Grid).
-- **Geração de Código:** Exportação automática de CSS limpo e otimizado.
+- **Geração de Código:** Exportação automática de CSS e HTML limpos e otimizados.
 - **Gestão de Itens:** Controle visual da quantidade de elementos no container.
+- **Estado Persistente:** Compartilhamento de layouts via URL (query params) para colaboração fácil.
 
 ### Backend e Cloud (Estrutura Preparada)
 - Autorização segura com JWT.

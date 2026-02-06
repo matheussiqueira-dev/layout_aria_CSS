@@ -144,7 +144,11 @@
           </nav>
           
           <div class="top-actions">
-            <button class="btn secondary" id="btn-login">Login</button>
+            <!-- Futura integração com o backend -->
+            <button class="btn secondary" id="btn-share" aria-label="Gerar link compartilhável">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path><polyline points="16 6 12 2 8 6"></polyline><line x1="12" y1="2" x2="12" y2="15"></line></svg>
+              Share
+            </button>
             <button class="btn primary" id="btn-save">Salvar Layout</button>
           </div>
         </header>
@@ -163,14 +167,27 @@
         <!-- Painel de Código -->
         <section class="code-panel">
           <div class="code-header">
-            <h4>CSS Gerado</h4>
-            <button id="copy-css" class="btn-xs">Copiar</button>
+            <div class="code-tabs">
+              <button class="tab-btn active" data-tab="css">CSS</button>
+              <button class="tab-btn" data-tab="html">HTML</button>
+            </div>
+            <button id="copy-code" class="btn-xs">Copiar</button>
           </div>
-          <pre><code id="css-output">.container {
+          <div class="code-content active" id="tab-css">
+            <pre><code id="css-output">.container {
   display: flex;
   flex-direction: row;
   gap: 16px;
 }</code></pre>
+          </div>
+          <div class="code-content hidden" id="tab-html">
+            <pre><code id="html-output">&lt;div class="container"&gt;
+  &lt;div class="flex-item"&gt;1&lt;/div&gt;
+  &lt;div class="flex-item"&gt;2&lt;/div&gt;
+  &lt;div class="flex-item"&gt;3&lt;/div&gt;
+  &lt;div class="flex-item"&gt;4&lt;/div&gt;
+&lt;/div&gt;</code></pre>
+          </div>
         </section>
       </main>
     </div>
