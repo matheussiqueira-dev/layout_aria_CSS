@@ -454,6 +454,22 @@ class LayoutStudio {
         }
       }
     });
+
+    // Toggle Groups Visual State Update
+    this.dom.toggleGroups.forEach(group => {
+        const prop = group.dataset.cssProp;
+        const currentVal = this.state.config[prop];
+        
+        const btns = group.querySelectorAll('.toggle-btn');
+        btns.forEach(b => {
+             // Handle simple value match
+             if(b.dataset.value === currentVal) {
+                 b.classList.add('active');
+             } else {
+                 b.classList.remove('active');
+             }
+        });
+    });
   }
 
   renderCode() {
