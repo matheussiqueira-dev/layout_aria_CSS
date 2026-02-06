@@ -138,7 +138,8 @@ class LayoutStudio {
         }
     });
   }
-Range Inputs
+  bindEvents() {
+    // Range Inputs
     this.dom.inputs.forEach(input => {
       input.addEventListener('input', (e) => {
         this.updateConfig(e.target.dataset.cssProp, e.target.value);
@@ -154,9 +155,7 @@ Range Inputs
         const prop = group.dataset.cssProp;
         const value = btn.dataset.value;
         
-        this.updateConfig(prop, 
-      input.addEventListener('input', (e) => {
-        this.updateConfig(e.target.dataset.cssProp, e.target.value);
+        this.updateConfig(prop, value);
       });
     });
 
