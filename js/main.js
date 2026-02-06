@@ -42,6 +42,8 @@ class LayoutStudio {
     this.loadStateFromURL();
     this.bindEvents();
     this.initModals();
+    this.applyTheme(); // Init theme
+    this.updateAuthUI(); // Init auth UI
     this.render();
   }
 
@@ -58,9 +60,8 @@ class LayoutStudio {
       removeItemBtn: document.getElementById('remove-item'),
       themeToggle: document.getElementById('theme-toggle'),
       copyBtn: document.getElementById('copy-code'),
-      shareBtn: document.getElementById('btn-share'),
-      saveBtn: document.getElementById('btn-save'),
-      loginBtn: document.getElementById('btn-login'), // Placeholder if I add it
+      
+      // Dynamic containers
       toast: document.getElementById('toast'),
       tabBtns: document.querySelectorAll('.tab-btn'),
       tabContents: {
@@ -68,7 +69,7 @@ class LayoutStudio {
         html: document.getElementById('tab-html')
       },
       presets: document.querySelectorAll('[data-preset]'),
-      authSection: document.querySelector('.top-actions') // Where login/save btns are
+      authContainer: document.getElementById('auth-container')
     };
   }
 
@@ -161,6 +162,136 @@ Range Inputs
 
     // Items
     this.dom.addItemBtn.addEventListener('click', () => this.updateItems(1));
+    this.dom.removeItemBtn.addEventListener('click', () => this.updateItems(-1));
+
+    // Theme
+    this.dom.themeToggle.addEventListener('click', () => this.toggleTheme());
+
+    // Tabs
+    this.dom.tabBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const tab = btn.dataset.tab;
+        this.switchTab(tab);
+      });
+    });
+    
+    // Copy Code
+    this.dom.copyBtn.addEventListener('click', () => this.copyToClipboard());
+
+    // Presets
+    this.dom.presets.forEach(btn => {
+      btn.addEventListener('click', () => {
+         const preset = btn.dataset.preset;
+         this.applyPreset(preset);
+      });
+    });
+
+    // Dynamic Auth Actions (Delegation)
+    this.dom.authContainer.addEventListener('click', (e) => {
+        const btn = e.target.closest('button');
+        if(!btn) return;
+
+        if(btn.id === 'btn-login') this.loginModal.open();
+        if(btn.id === 'btn-save') this.saveModal.open();
+        if(btn.id === 'btn-share') this.shareLayout();
+        if(btn.id === 'btn-logout') this.logout();
+    });
+  }
+
+  toggleTheme() {
+    this.state.theme = this.state.theme === 'dark' ? 'light' : 'dark';
+    this.applyTheme();
+  }
+
+  applyTheme() {
+    const isDark = this.state.theme === 'dark';
+    document.body.classList.toggle('theme-dark', isDark);
+    
+    // Icon toggle
+    const sun = this.dom.themeToggle.querySelector('.sun-icon');
+    const moon = this.dom.themeToggle.querySelector('.moon-icon');
+    if(sun && moon) {
+        sun.style.display = isDark ? 'block' : 'none';
+        moon.style.display = isDark ? 'none' : 'block';
+    }
+  }
+
+  switchTab(tabName) {
+    this.state.activeTab = tabName;
+    
+    // Buttons
+    this.dom.tabBtns.forEach(b => {
+      if(b.dataset.tab === tabName) b.classList.add('active');
+      else b.classList.remove('active');
+    });
+
+    // Content
+    Object.keys(this.dom.tabContents).forEach(k => {
+      const el = this.dom.tabContents[k];
+      if(k === tabName) {
+        el.classList.remove('hidden');
+        el.classList.add('active');
+      } else {
+        el.classList.add('hidden');
+        el.classList.remove('active');
+      }
+    });
+  }
+
+  applyPreset(name) {
+    const presets = {
+       'default': { 'flex-direction': 'row', 'flex-wrap': 'nowrap', 'justify-content': 'flex-start', 'align-items': 'stretch', 'gap': '16' },
+       'hero':    { 'flex-direction': 'column', 'justify-content': 'center', 'align-items': 'center', 'gap': '32', 'flex-wrap': 'wrap' },
+       'sidebar': { 'flex-direction': 'row', 'align-items': 'flex-start', 'justify-content': 'space-between', 'gap': '0' },
+       'grid':    { 'flex-direction': 'row', 'flex-wrap': 'wrap', 'justify-content': 'center', 'gap': '24' }
+    };
+    
+    if(presets[name]) {
+       this.state.config = { ...this.state.config, ...presets[name] };
+       this.updateURL();
+       this.render();
+       
+       // UI Update for Pills
+       this.dom.presets.forEach(p => {
+           if(p.dataset.preset === name) p.classList.add('active');
+           else p.classList.remove('active');
+       });
+    }
+  }
+
+  updateAuthUI() {
+    // Re-render buttons based on user state
+    if (this.state.user) {
+        this.dom.authContainer.innerHTML = `
+          <button id="btn-save" class="btn primary">Salvar</button>
+          <button id="btn-share" class="btn secondary">Compartilhar</button>
+          <button id="btn-logout" class="icon-btn" title="Sair">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+          </button>
+        `;
+    } else {
+        this.dom.authContainer.innerHTML = `
+          <button id="btn-login" class="btn primary">Entrar / Criar Conta</button>
+        `;
+    }
+  }
+
+  logout() {
+    authService.logout();
+    this.state.user = null;
+    this.updateAuthUI();
+    toast.show('Você saiu da conta', 'success');
+  }
+
+  copyToClipboard() {
+      const code = this.state.activeTab === 'css' 
+          ? this.dom.cssOutput.textContent 
+          : this.dom.htmlOutput.textContent;
+          
+      navigator.clipboard.writeText(code).then(() => {
+          toast.show('Código copiado!', 'success');
+      });
+  }
     this.dom.removeItemBtn.addEventListener('click', () => this.updateItems(-1));
 
     // Theme
