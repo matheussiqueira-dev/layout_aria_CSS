@@ -48,7 +48,9 @@ class LayoutStudio {
   cacheDOM() {
     this.dom = {
       preview: document.getElementById('playground'),
-      inputs: document.querySelectorAll('[data-css-prop]'),
+      // Now inputs includes Ranges and Generic inputs, but NOT the button groups directly usually
+      inputs: document.querySelectorAll('input[data-css-prop]'), 
+      toggleGroups: document.querySelectorAll('[data-ui-control="toggle"]'),
       cssOutput: document.getElementById('css-output'),
       htmlOutput: document.getElementById('html-output'),
       itemCount: document.getElementById('item-count'),
@@ -135,10 +137,23 @@ class LayoutStudio {
         }
     });
   }
-
-  bindEvents() {
-    // Inputs
+Range Inputs
     this.dom.inputs.forEach(input => {
+      input.addEventListener('input', (e) => {
+        this.updateConfig(e.target.dataset.cssProp, e.target.value);
+      });
+    });
+
+    // Custom UI Toggle Groups (Icons/Buttons)
+    this.dom.toggleGroups.forEach(group => {
+      group.addEventListener('click', (e) => {
+        const btn = e.target.closest('.toggle-btn');
+        if (!btn) return;
+        
+        const prop = group.dataset.cssProp;
+        const value = btn.dataset.value;
+        
+        this.updateConfig(prop, 
       input.addEventListener('input', (e) => {
         this.updateConfig(e.target.dataset.cssProp, e.target.value);
       });
@@ -268,15 +283,30 @@ class LayoutStudio {
 
     // Apply Styles
     Object.entries(config).forEach(([prop, val]) => {
-      style.setProperty(prop, prop === 'gap' ? `${val}px` : val);
+    // 1. Render Range/Text Inputs
+    this.dom.inputs.forEach(input => {
+      const prop = input.dataset.cssProp;
+      if (this.state.config[prop]) {
+        input.value = this.state.config[prop];
+        if (input.type === 'range') {
+          const display = document.getElementById(`${input.id}-val`);
+          if (display) display.textContent = `${input.value}px`;
+        }
+      }
     });
 
-    // Render Items
-    this.dom.preview.innerHTML = '';
-    for (let i = 1; i <= items; i++) {
-      const el = document.createElement('div');
-      el.className = 'flex-item';
-      el.textContent = i;
+    // 2. Render Toggle Groups (State Active Class)
+    this.dom.toggleGroups.forEach(group => {
+        const prop = group.dataset.cssProp;
+        const currentVal = this.state.config[prop];
+        
+        // Remove active from all
+        const btns = group.querySelectorAll('.toggle-btn');
+        btns.forEach(b => b.classList.remove('active'));
+
+        // Add active to current
+        const target = group.querySelector(`[data-value="${currentVal}"]`);
+        if (target) target.classList.add('active');l.textContent = i;
       el.style.animation = 'fadeIn 0.3s ease';
       this.dom.preview.appendChild(el);
     }
