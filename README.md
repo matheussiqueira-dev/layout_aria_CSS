@@ -1,106 +1,93 @@
-# Layout Aria CSS (FlexStudio)
+# Layout Aria CSS (Fullstack Edition)
 
 > **Autor:** Matheus Siqueira  
 > **Website:** [https://www.matheussiqueira.dev/](https://www.matheussiqueira.dev/)
 
-**Layout Aria CSS** é um estúdio de desenvolvimento visual profissional para layouts Flexbox. Projetado para desenvolvedores e designers que buscam precisão, acessibilidade e código limpo, a plataforma oferece um ambiente interativo para prototipagem rápida e exportação de código pronto para produção.
+**Layout Aria CSS** é um sistema completo e profissional para arquitetura visual e desenvolvimento ágil com Flexbox. Este projeto demonstra uma aplicação **Fullstack Sênior**, combinando uma interface moderna e responsiva (Vanilla JS Modular) com uma API robusta e segura (Node.js/Express).
 
 ---
 
-## 🚀 Funcionalidades Principais
+## 🏗️ Arquitetura e Visão Técnica
 
-### Interface e Design
-- **Dashboard Profissional:** Layout moderno com tema escuro/claro, focado na experiência do desenvolvedor.
-- **Preview em Tempo Real:** Visualização instantânea de todas as propriedades Flexbox aplicadas.
-- **Controles Completos:**
-  - Direção, Wrap, Justify, Align Items e Align Content.
-  - Controle preciso de espaçamento (Gap) via slider.
-  - Adição e remoção dinâmica de itens.
-- **Acessibilidade:** Interface semanticamente correta, com suporte a navegação por teclado e alto contraste.
+O projeto foi construído seguindo os princípios de **Clean Architecture** e **Modularidade**, separando claramente responsabilidades para garantir escalabilidade e manutenibilidade.
 
-### Funcionalidades de Produtividade
-- **Presets Inteligentes:** Configurações pré-definidas para cenários comuns (Hero, Sidebar, Grid).
-- **Geração de Código:** Exportação automática de CSS e HTML limpos e otimizados.
-- **Gestão de Itens:** Controle visual da quantidade de elementos no container.
-- **Estado Persistente:** Compartilhamento de layouts via URL (query params) para colaboração fácil.
+### 1. Frontend (SPA Leve)
+- **Tecnologia:** Vanilla JS com Estrutura Modular (ES Modules).
+- **Design Pattern:** State-Driven UI (O estado dita a interface).
+- **Persistência:** Deep Linking (Estado na URL) e API Rest.
+- **Componentes:** Modais, Toasts e Controles reutilizáveis.
+- **Estilização:** CSS Variables (Design Tokens) com tema Dark/Light nativo.
 
-### Backend e Cloud (Estrutura Preparada)
-- Autorização segura com JWT.
-- API REST modular para salvamento e compartilhamento de layouts.
-- Sistema de logs e métricas para monitoramento (admin).
-
----
-
-## 🛠️ Tecnologias Utilizadas
-
-### Frontend
-- **HTML5 Semântico:** Estrutura acessível e otimizada para SEO.
-- **CSS3 Moderno:** Variáveis (Custom Properties), CSS Grid, Flexbox, Animações.
-- **Vanilla JS:** Lógica de manipulação de DOM leve e performática, sem dependências externas pesadas.
-
-### Backend
-- **Node.js**: Runtime de alta performance.
-- **Express**: Framework web minimalista e robusto.
-- **Middleware Chain**: Arquitetura organizada com tratamento de erros, logging (Pino) e segurança (Helmet, CORS).
-- **JSON Store**: Persistência de dados leve baseada em arquivo (Data Store).
+### 2. Backend (API REST)
+- **Stack:** Node.js + Express.
+- **Estrutura:** Dividida em Módulos (`auth`, `layouts`, `admin`).
+- **Segurança:**
+  - Login/Registro com JWT (Access e Refresh Tokens).
+  - Sanitização de inputs e proteção contra XSS/Injection.
+  - Rate Limiting para evitar abuso.
+  - CORS configurado para segurança.
+- **Dados:** Persistência em arquivo JSON com controle de concorrência e atomicidade (simulando NoSQL para portabilidade).
 
 ---
 
-## 📂 Estrutura do Projeto
+## 🚀 Funcionalidades
 
+### Para o Desenvolvedor (Usuário)
+- **Studio Flexbox:** Visualização em tempo real de propriedades display, align, justify, gap, etc.
+- **Exportação de Código:** Gera HTML e CSS prontos para produção.
+- **Cloud Save:** Salve seus layouts na nuvem (requer login).
+- **Compartilhamento:** Gere links únicos que carregam o estado exato do seu layout.
+- **Presets de Mercado:** Configurações rápidas para Hero, Sidebar e Grids.
+
+### Para o Administrador
+- **Logs de Auditoria:** Rastreio de ações de usuários.
+- **Gestão de Sessões:** Controle de dispositivos conectados.
+
+---
+
+## 🛠️ Instalação e Execução
+
+### Pré-requisitos
+- Node.js (v18 ou superior)
+
+### 1. Configurar e Rodar o Backend
+```bash
+cd backend
+npm install
+npm start
 ```
-layout_aria_CSS/
-├── assets/          # Recursos estáticos (imagens, ícones)
-├── backend/         # API REST e Lógica de Servidor
-│   ├── src/
-│   │   ├── modules/ # Funcionalidades (auth, layouts, admin)
-│   │   ├── core/    # Configurações base e utilitários
-│   │   └── ...
-├── scripts/         # Scripts de automação
-├── index.html       # Entry point da aplicação Web
-├── styles.css       # Design System e Estilização global
-└── script.js        # Lógica de interface e interatividade
+*O servidor iniciará na porta `4000` (padrão).*
+
+### 2. Rodar o Frontend
+Como o Frontend utiliza ES Modules, ele precisa ser servido por um servidor HTTP (não funciona abrindo direto o arquivo).
+
+Você pode usar o **Live Server** do VS Code ou instanciar um servidor simples:
+```bash
+# Na raiz do projeto
+npx serve .
 ```
+Acesse `http://localhost:3000` (ou a porta indicada).
 
 ---
 
-## ⚡ Como Rodar o Projeto
+## 🧠 Decisões de Design (UX/UI)
 
-### Frontend (Playground)
-Basta abrir o arquivo `index.html` em qualquer navegador moderno. Não requer instalação para as funcionalidades visuais.
-
-### Backend (API)
-1. Navegue até a pasta do backend:
-   ```bash
-   cd backend
-   ```
-2. Instale as dependências:
-   ```bash
-   npm install
-   ```
-3. Inicie o servidor:
-   ```bash
-   npm start
-   ```
-   *O backend rodará na porta definida nas variáveis de ambiente (padrão: 3000).*
+1.  **Imersão:** A interface ocupa 100% da tela para maximizar a área de canvas.
+2.  **Feedback Imediato:** Todas as alterações refletem instantaneamente. Toasts informam sucesso/erro sem bloquear o fluxo.
+3.  **Acessibilidade:**
+    - Foco visível em todos os controles.
+    - Contraste adequado (WCAG AA/AAA).
+    - HTML Semântico.
+4.  **Consistência:** Um Design System enxuto (Tokens de cor, espaçamento e tipografia) garante harmonia visual.
 
 ---
 
-## 💡 Boas Práticas Adotadas
-
-1. **Clean Code:** Nomenclatura clara, funções pequenas e responsabilidade única.
-2. **UI/UX First:** Foco total na usabilidade e clareza visual antes da complexidade técnica.
-3. **Performance:** Frontend sem frameworks pesados para carregamento instantâneo.
-4. **Arquitetura Modular:** O backend é dividido em módulos de domínio, facilitando a escalabilidade.
-
----
-
-## 🔮 Melhorias Futuras
-
-- Integração completa do Frontend com a API de Persistência.
-- Sistema de Login/Registro para salvar layouts na nuvem.
-- Implementação de layouts CSS Grid.
-- Exportação de código para Tailwind CSS e React.
+## 🔮 Roadmap e Melhorias
+- [ ] Implementação de CSS Grid Studio.
+- [ ] Galeria pública de layouts da comunidade.
+- [ ] Testes E2E com Cypress.
+- [ ] Backend com Banco Relacional (PostgreSQL) via Docker.
 
 ---
+
 **Desenvolvido com excelência por Matheus Siqueira.**

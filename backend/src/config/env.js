@@ -31,7 +31,7 @@ const env = {
   logLevel: process.env.LOG_LEVEL || "info",
   jwtSecret: process.env.JWT_SECRET || "dev-only-secret-change-me",
   jwtExpiresIn: process.env.JWT_EXPIRES_IN || "1h",
-  corsOrigin: toList(process.env.CORS_ORIGIN || "http://localhost:8080"),
+  corsOrigin: toList(process.env.CORS_ORIGIN || "http://localhost:8080,http://127.0.0.1:5500,http://localhost:5500,http://localhost:3000,http://localhost:5000"),
   dataFile: path.resolve(process.cwd(), process.env.DATA_FILE || "./data/db.json"),
   rateLimitWindowMs: toInt(process.env.RATE_LIMIT_WINDOW_MS, 60000),
   rateLimitMax: toInt(process.env.RATE_LIMIT_MAX, 120),
