@@ -411,34 +411,35 @@ class LayoutStudio {
     const { config, items } = this.state;
     const style = this.dom.preview.style;
 
-    // Apply Styles
+    // Apply Styles to Preview Container
+    // First clear dynamic styles to avoid conflict with classes
+    this.dom.preview.style.cssText = ''; 
+    
+    // Apply Flex/Grid properties
     Object.entries(config).forEach(([prop, val]) => {
-    // 1. Render Range/Text Inputs
-    this.dom.inputs.forEach(input => {
-      const prop = input.dataset.cssProp;
-      if (this.state.config[prop]) {
-        input.value = this.state.config[prop];
-        if (input.type === 'range') {
-          const display = document.getElementById(`${input.id}-val`);
-          if (display) display.textContent = `${input.value}px`;
-        }
-      }
+       const value = prop === 'gap' ? `${val}px` : val;
+       this.dom.preview.style.setProperty(prop, value);
     });
 
-    // 2. Render Toggle Groups (State Active Class)
-    this.dom.toggleGroups.forEach(group => {
-        const prop = group.dataset.cssProp;
-        const currentVal = this.state.config[prop];
-        
-        // Remove active from all
-        const btns = group.querySelectorAll('.toggle-btn');
-        btns.forEach(b => b.classList.remove('active'));
-
-        // Add active to current
-        const target = group.querySelector(`[data-value="${currentVal}"]`);
-        if (target) target.classList.add('active');l.textContent = i;
-      el.style.animation = 'fadeIn 0.3s ease';
-      this.dom.preview.appendChild(el);
+    // Render Flex Items
+    this.dom.preview.innerHTML = '';
+    for (let i = 1; i <= items; i++) {
+        const el = document.createElement('div');
+        el.className = 'flex-item';
+        el.textContent = i;
+        // Animation for new items
+        el.style.animation = 'fadeIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)';
+        this.dom.preview.appendChild(el);
+    }
+    
+    // Add extra inline animation definition if not in CSS
+    if (!document.getElementById('dynamic-anims')) {
+        const styleSheet = document.createElement("style");
+        styleSheet.id = 'dynamic-anims';
+        styleSheet.innerText = `
+            @keyframes fadeIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
+        `;
+        document.head.appendChild(styleSheet);
     }
   }
 
